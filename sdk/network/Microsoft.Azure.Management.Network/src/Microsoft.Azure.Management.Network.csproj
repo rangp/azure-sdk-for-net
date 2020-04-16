@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<!-- Please do not move/edit code below this line -->
+	<Import Project="$(RepoEngPath)/mgmt/AzSdk.reference.props" />
+	<!-- Please do not move/edit code above this line -->
+
+	<PropertyGroup>
+		<PackageId>Microsoft.Azure.Management.Network</PackageId>
+		<Description>Provides management capabilities for Network services.</Description>
+		<AssemblyName>Microsoft.Azure.Management.Network</AssemblyName>
+		<Version>19.20.0-preview</Version>
+		<PackageTags>Microsoft Azure Network management;Network;Network management;</PackageTags>
+		<PackageReleaseNotes>
+		<![CDATA[
+            - Added support for IpAllocation
+            - Added support for PrivateDnsZoneGroup
+            - Added support for SecurityPartnerProvider
+            - Added support for ForceFirewallPolicyAssociation in ApplicationGateway
+            - Added support for IntrusionSystemMode in FirewallPolicy
+		]]></PackageReleaseNotes>
+	</PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>$(SdkTargetFx)</TargetFrameworks>
+	</PropertyGroup>
+
+	<!-- Please do not move/edit code below this line -->
+	<Import Condition=" Exists('$([MSBuild]::GetPathOfFileAbove(AzSdk.RP.props))') " Project="$([MSBuild]::GetPathOfFileAbove('AzSdk.RP.props'))" />
+	<!-- Please do not move/edit code above this line -->
+</Project>

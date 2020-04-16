@@ -1,73 +1,76 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
 using System.IO;
-using Azure.Core.Pipeline;
 using NUnit.Framework;
 
 namespace Azure.Core.Testing
 {
     [Category("Recorded")]
-    public abstract class RecordedTestBase: ClientTestBase
+    public abstract class RecordedTestBase : ClientTestBase
     {
-        private const string ModeEnvironmentVariableName = "AZURE_TEST_MODE";
-
         protected RecordedTestSanitizer Sanitizer { get; set; }
 
         protected RecordMatcher Matcher { get; set; }
 
-        protected TestRecording Recording { get; private set; }
+        public TestRecording Recording { get; private set; }
 
-        protected RecordedTestBase(bool isAsync) : base(isAsync)
+        public RecordedTestMode Mode { get; }
+
+#if DEBUG
+        /// <summary>
+        /// Flag you can (temporarily) enable to save failed test recordings
+        /// and debug/re-run at the point of failure without re-running
+        /// potentially lengthy live tests.  This should never be checked in
+        /// and will be compiled out of release builds to help make that easier
+        /// to spot.
+        /// </summary>
+        public bool SaveDebugRecordingsOnFailure { get; set; } = false;
+#endif
+
+        protected RecordedTestBase(bool isAsync) : this(isAsync, RecordedTestUtilities.GetModeFromEnvironment())
+        {
+        }
+
+        protected RecordedTestBase(bool isAsync, RecordedTestMode mode) : base(isAsync)
         {
             Sanitizer = new RecordedTestSanitizer();
             Matcher = new RecordMatcher(Sanitizer);
+            Mode = mode;
         }
 
-        protected virtual RecordedTestMode Mode
+        private string GetSessionFilePath(string name = null)
         {
-            get
-            {
-                string modeString = Environment.GetEnvironmentVariable(ModeEnvironmentVariableName);
+            TestContext.TestAdapter testAdapter = TestContext.CurrentContext.Test;
 
-                RecordedTestMode mode = RecordedTestMode.Playback;
-                if (!string.IsNullOrEmpty(modeString))
-                {
-                    mode = (RecordedTestMode)Enum.Parse(typeof(RecordedTestMode), modeString, true);
-                }
+            name ??= testAdapter.Name;
 
-                return mode;
-            }
-        }
-
-        protected virtual string SessionFilePath
-        {
-            get
-            {
-                TestContext.TestAdapter testAdapter = TestContext.CurrentContext.Test;
-                var className = testAdapter.ClassName.Substring(testAdapter.ClassName.LastIndexOf('.') + 1);
-                return Path.Combine(TestContext.CurrentContext.TestDirectory , "SessionRecords", className, testAdapter.Name + (IsAsync ? "Async": string.Empty) + ".json");
-            }
+            string className = testAdapter.ClassName.Substring(testAdapter.ClassName.LastIndexOf('.') + 1);
+            string fileName = name + (IsAsync ? "Async" : string.Empty) + ".json";
+            return Path.Combine(TestContext.CurrentContext.TestDirectory, "SessionRecords", className, fileName);
         }
 
         [SetUp]
         public virtual void StartTestRecording()
         {
-            Recording = new TestRecording(Mode, SessionFilePath, Sanitizer, Matcher);
-            Recording.Start();
+            // Only create test recordings for the latest version of the service
+            TestContext.TestAdapter test = TestContext.CurrentContext.Test;
+            if (Mode != RecordedTestMode.Live &&
+                test.Properties.ContainsKey("SkipRecordings"))
+            {
+                throw new IgnoreException((string) test.Properties.Get("SkipRecordings"));
+            }
+            Recording = new TestRecording(Mode, GetSessionFilePath(), Sanitizer, Matcher);
         }
 
         [TearDown]
         public virtual void StopTestRecording()
         {
-            Recording.Stop();
-        }
-
-        public T InstrumentClientOptions<T>(T clientOptions) where T: HttpClientOptions
-        {
-            clientOptions.Transport = Recording.CreateTransport(clientOptions.Transport);
-            return clientOptions;
+            bool save = TestContext.CurrentContext.Result.FailCount == 0;
+#if DEBUG
+            save |= SaveDebugRecordingsOnFailure;
+#endif
+            Recording?.Dispose(save);
         }
     }
 }

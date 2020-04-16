@@ -1,5 +1,16 @@
-variables:
-  ProjectFile: sdk/keyvault/Microsoft.Azure.KeyVault.sln
+trigger: none
+
+resources:
+  repositories:
+    - repository: azure-sdk-tools
+      type: github
+      name: Azure/azure-sdk-tools
+      endpoint: azure
 
 jobs:
-- template: ../../eng/pipelines/templates/jobs/tests.yml
+- template: ../../eng/pipelines/templates/jobs/archetype-sdk-tests.yml
+  parameters:
+    ServiceDirectory: keyvault
+    EnvVars:
+      # Runs samples with live tests.
+      AZURE_KEYVAULT_TEST_MODE: Live

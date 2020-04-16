@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<!-- Please do not move/edit code below this line -->
+	<Import Project="$(RepoEngPath)/mgmt/AzSdk.reference.props" />
+	<!-- Please do not move/edit code below this line -->
+
+	<PropertyGroup>
+		<PackageId>Microsoft.Azure.Management.ContainerRegistry</PackageId>
+		<Description>Provides management capabilities for Azure Container Registry.</Description>
+		<Version>5.0.0-preview</Version>
+		<AssemblyName>Microsoft.Azure.Management.ContainerRegistry</AssemblyName>
+		<PackageTags>Microsoft Azure Container Registry;Container Registry;</PackageTags>
+		<PackageReleaseNotes>
+			<![CDATA[
+        1) Add support for repository-scoped permission (Preview)
+        2) Add support for Azure Private Link (Preview)
+        3) Add support for encrtyption using customer-managed keys (Preview)
+        4) Add support for TaskRun (Preview)
+        5) Add support for AgentPool (Preview)
+        6) Breaking change: Exception thrown in case of failure changed from `CloudException` to `ErrorResponseException`
+      ]]>
+		</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<TargetFrameworks>$(SdkTargetFx)</TargetFrameworks>
+	</PropertyGroup>
+
+	<!-- Please do not move/edit code below this line -->
+	<Import Condition=" Exists('$([MSBuild]::GetPathOfFileAbove(AzSdk.RP.props))') " Project="$([MSBuild]::GetPathOfFileAbove('AzSdk.RP.props'))" />
+	<!-- Please do not move/edit code above this line -->
+</Project>

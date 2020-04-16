@@ -1,11 +1,15 @@
 trigger: none
 
-variables:
-  ProjectFile: sdk/eventhub/Microsoft.Azure.EventHubs.sln
+resources:
+  repositories:
+    - repository: azure-sdk-tools
+      type: github
+      name: Azure/azure-sdk-tools
+      endpoint: azure
 
 jobs:
-- template: ../../eng/pipelines/templates/jobs/tests.yml
+- template: ../../eng/pipelines/templates/jobs/archetype-sdk-tests.yml
   parameters:
-    envvars:
-      EVENT_HUBS_CONNECTION_STRING: $(net-eventhubs-internal-namespace-connection-string)
-      EVENT_HUBS_STORAGE_CONNECTION_STRING: $(net-eventhubs-internal-storage-connection-string)
+    MaxParallel: 2
+    ServiceDirectory: eventhub
+    TimeoutInMinutes: 120

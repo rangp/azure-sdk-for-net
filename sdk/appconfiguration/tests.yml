@@ -1,10 +1,13 @@
 trigger: none
 
-variables:
-  ProjectFile: sdk/appconfiguration/Azure.ApplicationModel.Configuration/Azure.ApplicationModel.Configuration.sln
+resources:
+  repositories:
+    - repository: azure-sdk-tools
+      type: github
+      name: Azure/azure-sdk-tools
+      endpoint: azure
 
 jobs:
-- template: ../../eng/pipelines/templates/jobs/tests.yml
+- template: ../../eng/pipelines/templates/jobs/archetype-sdk-tests.yml
   parameters:
-    envvars:
-      APP_CONFIG_CONNECTION: $(net-azconfig-test-connection-string)
+    ServiceDirectory: appconfiguration

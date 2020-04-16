@@ -1,14 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See License.txt in the project root for
-// license information.
+// Licensed under the MIT License.
 
-namespace Azure.Storage.Common.Test
+namespace Azure.Storage.Test
 {
-    partial class HttpPipelineTests
+    internal partial class HttpPipelineTests
     {
         /*
-        [TestMethod]
-        [DoNotParallelize]
+        [Test]
+        [NonParallelizable]
         public async Task Logging_Shared_Key_Redact()
         {
             var sourceSwitch = new SourceSwitch("sourceSwitch") { Level = SourceLevels.All };
@@ -34,8 +33,8 @@ namespace Azure.Storage.Common.Test
             }
         }
 
-        [TestMethod]
-        [DoNotParallelize]
+        [Test]
+        [NonParallelizable]
         public async Task Logging_SAS_Redact()
         {
             var sourceSwitch = new SourceSwitch("sourceSwitch") { Level = SourceLevels.All };
@@ -65,12 +64,12 @@ namespace Azure.Storage.Common.Test
             }
         }
 
-        [TestMethod]
+        [Test]
         [Ignore("Needs permissions")]
-        [DoNotParallelize]
+        [NonParallelizable]
         public async Task Logging_EventLog()
         {
-            var serviceCollection = 
+            var serviceCollection =
                 new ServiceCollection()
                 .AddLogging(
                     builder =>
@@ -82,15 +81,15 @@ namespace Azure.Storage.Common.Test
             await Logging_TestImpl(serviceCollection);
         }
 
-        [TestMethod]
-        [DoNotParallelize]
+        [Test]
+        [NonParallelizable]
         public async Task Logging_ConsoleLog()
         {
             using (var textWriter = new StringWriter())
             {
                 Console.SetOut(textWriter);
 
-                var serviceCollection = 
+                var serviceCollection =
                     new ServiceCollection()
                     .AddLogging(
                         builder =>
@@ -103,9 +102,8 @@ namespace Azure.Storage.Common.Test
             }
         }
 
-        
-        [TestMethod]
-        [DoNotParallelize]
+        [Test]
+        [NonParallelizable]
         public async Task Logging_TraceLog()
         {
             var sourceSwitch = new SourceSwitch("sourceSwitch") { Level = SourceLevels.All };
@@ -114,7 +112,7 @@ namespace Azure.Storage.Common.Test
             using (var textWriterListener = new TextWriterTraceListener(textWriter))
             using (var consoleListener = new TextWriterTraceListener(Console.Out))
             {
-                var serviceCollection = 
+                var serviceCollection =
                     new ServiceCollection()
                     .AddLogging(
                         builder =>

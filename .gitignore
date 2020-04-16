@@ -22,6 +22,7 @@ tools/Microsoft.WindowsAzure.Build.Tasks/packages/
 PublishedNugets/
 src/NuGet.Config
 tools/7-zip/
+#tools/LocalNugetFeed/Microsoft.Internal.NetSdkBuild.Mgmt.Tools.*.nupkg
 
 [Tt]est[Rr]esult
 [Bb]uild[Ll]og.*
@@ -71,6 +72,9 @@ _ReSharper*/
 
 *.[Rr]e[Ss]harper
 
+# Rider IDE
+.idea
+
 # NCrunch
 *.ncrunch*
 .*crunch*.local.xml
@@ -101,7 +105,6 @@ TestResults
 [Tt]est[Rr]esult*
 *.Cache
 ClientBin
-[Ss]tyle[Cc]op.*
 ~$*
 *.dbmdl
 
@@ -114,8 +117,10 @@ tools/*.dll
 
 # Sensitive files
 *.keys
+!Azure.AspNetCore.DataProtection.Keys
+!Azure.Security.KeyVault.Keys
 *.pfx
-sdk/storage/Azure.Storage.Common/tests/Shared/TestConfigurations.xml
+TestConfigurations.xml
 
 # Backup & report files from converting an old project file to a newer
 # Visual Studio version. Backup files are not needed, because we have git ;-)
@@ -148,3 +153,6 @@ pingme.txt
 # TS/Node files
 dist/
 node_modules/
+
+# MSBuild binary log files
+msbuild.binlog

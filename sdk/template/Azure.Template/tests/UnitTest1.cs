@@ -1,15 +1,18 @@
-using Azure.Data;
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System;
-using Xunit;
+using Azure.Template;
+using NUnit.Framework;
 
 namespace Microsoft.Azure.Template.Tests
 {
     public class UnitTest1
     {
-        [Fact]
+        [Test]
         public void Test1()
         {
-            var c = new Class1();
+            var c = new TemplateClient(new Uri("http://localhost:3000/"));
 
             Assert.NotNull(c);
         }

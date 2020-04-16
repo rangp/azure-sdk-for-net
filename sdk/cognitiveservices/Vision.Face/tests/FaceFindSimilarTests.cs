@@ -12,14 +12,16 @@ namespace FaceSDK.Tests
 {
     public class FaceFindSimilarTests : BaseTests
     {
+        private static readonly string detectionModel = DetectionModel.Detection01;
+
         private static readonly string recognitionModel = RecognitionModel.Recognition02;
 
-        [Fact(Skip = "https://github.com/Azure/azure-sdk-for-net/issues/6216")]
+        [Fact]
         public void FaceFindSimilarFacePositive()
         {
-            using (MockContext context = MockContext.Start(this.GetType().FullName))
+            using (MockContext context = MockContext.Start(this.GetType()))
             {
-                HttpMockServer.Initialize(this.GetType().FullName, "FaceFindSimilarFacePositive");
+                HttpMockServer.Initialize(this.GetType(), "FaceFindSimilarFacePositive");
 
                 IFaceClient client = GetFaceClient(HttpMockServer.CreateInstance());
                 Guid? faceId1 = null;
@@ -31,7 +33,7 @@ namespace FaceSDK.Tests
 
                 using (FileStream stream = new FileStream(Path.Combine("TestImages", "Satya4.jpg"), FileMode.Open))
                 {
-                    faceId1 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                    faceId1 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                     Assert.NotNull(faceId1);
                 }
 
@@ -42,12 +44,12 @@ namespace FaceSDK.Tests
             }
         }
 
-        [Fact(Skip = "https://github.com/Azure/azure-sdk-for-net/issues/6216")]
+        [Fact]
         public void FaceFindSimilarFaceListPositive()
         {
-            using (MockContext context = MockContext.Start(this.GetType().FullName))
+            using (MockContext context = MockContext.Start(this.GetType()))
             {
-                HttpMockServer.Initialize(this.GetType().FullName, "FaceFindSimilarFaceListPositive");
+                HttpMockServer.Initialize(this.GetType(), "FaceFindSimilarFaceListPositive");
 
                 IFaceClient client = GetFaceClient(HttpMockServer.CreateInstance());
                 Guid? faceId1 = null;
@@ -60,7 +62,7 @@ namespace FaceSDK.Tests
 
                     using (FileStream stream = new FileStream(Path.Combine("TestImages", "Satya4.jpg"), FileMode.Open))
                     {
-                        faceId1 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                        faceId1 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                         Assert.NotNull(faceId1);
                     }
 
@@ -76,12 +78,12 @@ namespace FaceSDK.Tests
             }
         }
 
-        [Fact(Skip = "https://github.com/Azure/azure-sdk-for-net/issues/6216")]
+        [Fact]
         public void FaceFindSimilarLargeFaceListPositive()
         {
-            using (MockContext context = MockContext.Start(this.GetType().FullName))
+            using (MockContext context = MockContext.Start(this.GetType()))
             {
-                HttpMockServer.Initialize(this.GetType().FullName, "FaceFindSimilarLargeFaceListPositive");
+                HttpMockServer.Initialize(this.GetType(), "FaceFindSimilarLargeFaceListPositive");
 
                 IFaceClient client = GetFaceClient(HttpMockServer.CreateInstance());
                 Guid? faceId1 = null;
@@ -98,7 +100,7 @@ namespace FaceSDK.Tests
 
                     using (FileStream stream = new FileStream(Path.Combine("TestImages", "Satya4.jpg"), FileMode.Open))
                     {
-                        faceId1 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                        faceId1 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                         Assert.NotNull(faceId1);
                     }
 
@@ -122,7 +124,7 @@ namespace FaceSDK.Tests
                 DetectedFace face = null;
                 using (FileStream stream = new FileStream(Path.Combine("TestImages", fileName + i + ".jpg"), FileMode.Open))
                 {
-                    face = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0];
+                    face = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0];
                 }
 
                 using (FileStream stream = new FileStream(Path.Combine("TestImages", fileName + i + ".jpg"), FileMode.Open))
@@ -131,7 +133,8 @@ namespace FaceSDK.Tests
                         face.FaceRectangle.Left,
                         face.FaceRectangle.Top,
                         face.FaceRectangle.Width,
-                        face.FaceRectangle.Height }).Result;
+                        face.FaceRectangle.Height },
+                        detectionModel: detectionModel).Result;
 
                     persistedFaceIds.Add(persistedFace.PersistedFaceId);
                 }
@@ -148,7 +151,7 @@ namespace FaceSDK.Tests
                 DetectedFace face = null;
                 using (FileStream stream = new FileStream(Path.Combine("TestImages", fileName + i + ".jpg"), FileMode.Open))
                 {
-                    face = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0];
+                    face = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0];
                 }
 
                 using (FileStream stream = new FileStream(Path.Combine("TestImages", fileName + i + ".jpg"), FileMode.Open))
@@ -157,7 +160,8 @@ namespace FaceSDK.Tests
                         face.FaceRectangle.Left,
                         face.FaceRectangle.Top,
                         face.FaceRectangle.Width,
-                        face.FaceRectangle.Height }).Result;
+                        face.FaceRectangle.Height },
+                        detectionModel: detectionModel).Result;
 
                     persistedFaceIds.Add(persistedFace.PersistedFaceId);
                 }
@@ -174,7 +178,7 @@ namespace FaceSDK.Tests
                 DetectedFace face = null;
                 using (FileStream stream = new FileStream(Path.Combine("TestImages", fileName + i + ".jpg"), FileMode.Open))
                 {
-                    face = client.Face.DetectWithStreamAsync(stream, recognitionModel: recognitionModel).Result[0];
+                    face = client.Face.DetectWithStreamAsync(stream, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0];
                 }
 
                 faceIdList.Add(face.FaceId);

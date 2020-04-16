@@ -1,16 +1,15 @@
 trigger: none
 
-variables:
-  ProjectFile: sdk/storage/Azure.Storage.sln
+resources:
+  repositories:
+    - repository: azure-sdk-tools
+      type: github
+      name: Azure/azure-sdk-tools
+      endpoint: azure
 
 jobs:
-- template: ../../eng/pipelines/templates/jobs/tests.yml
-  parameters:
-    presteps:
-      - powershell: |
-          $TestConfigurationPath = "$(Build.ArtifactStagingDirectory)/TestConfiguration.xml"
-          '$(net-storage-test-configuration)' | Out-File -Encoding Utf8 $TestConfigurationPath
-          Write-Host "##vso[task.setvariable variable=TestConfigurationPath]$TestConfigurationPath"
-
-    envvars:
-      AZ_STORAGE_CONFIG_PATH: $(TestConfigurationPath)
+  - template: ../../eng/pipelines/templates/jobs/archetype-sdk-tests.yml
+    parameters:
+      ServiceDirectory: storage
+      BuildInParallel: false
+      TimeoutInMinutes: 300

@@ -1,7 +1,13 @@
 trigger: none
 
-variables:
-  ProjectFile: sdk/core/Azure.Core/Azure.Core.sln
+resources:
+  repositories:
+    - repository: azure-sdk-tools
+      type: github
+      name: Azure/azure-sdk-tools
+      endpoint: azure
 
 jobs:
-- template: ../../eng/pipelines/templates/jobs/tests.yml
+  - template: ../../eng/pipelines/templates/jobs/archetype-sdk-tests.yml
+    parameters:
+      ServiceDirectory: core

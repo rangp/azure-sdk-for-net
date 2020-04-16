@@ -10,14 +10,16 @@ namespace FaceSDK.Tests
 {
     public class FaceVerificationTests : BaseTests
     {
+        private static readonly string detectionModel = DetectionModel.Detection01;
+
         private static readonly string recognitionModel = RecognitionModel.Recognition02;
 
         [Fact]
         public void FaceVerificationFacePositive()
         {
-            using (MockContext context = MockContext.Start(this.GetType().FullName))
+            using (MockContext context = MockContext.Start(this.GetType()))
             {
-                HttpMockServer.Initialize(this.GetType().FullName, "FaceVerificationFacePositive");
+                HttpMockServer.Initialize(this.GetType(), "FaceVerificationFacePositive");
 
                 IFaceClient client = GetFaceClient(HttpMockServer.CreateInstance());
 
@@ -25,12 +27,12 @@ namespace FaceSDK.Tests
                 Guid? faceId2 = null;
                 using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationBase1.png"), FileMode.Open))
                 {
-                    faceId1 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                    faceId1 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                 }
 
                 using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationCompare1.png"), FileMode.Open))
                 {
-                    faceId2 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                    faceId2 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                 }
 
                 Assert.NotNull(faceId1);
@@ -44,9 +46,9 @@ namespace FaceSDK.Tests
         [Fact]
         public void FaceVerificationPersonGroupPositive()
         {
-            using (MockContext context = MockContext.Start(this.GetType().FullName))
+            using (MockContext context = MockContext.Start(this.GetType()))
             {
-                HttpMockServer.Initialize(this.GetType().FullName, "FaceVerificationPersonGroupPositive");
+                HttpMockServer.Initialize(this.GetType(), "FaceVerificationPersonGroupPositive");
 
                 IFaceClient client = GetFaceClient(HttpMockServer.CreateInstance());
                 Guid? faceId2 = null;
@@ -58,12 +60,12 @@ namespace FaceSDK.Tests
                     Person createPersonResult = client.PersonGroupPerson.CreateAsync(personGroupId, "David").Result;
                     using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationBase1.png"), FileMode.Open))
                     {
-                        client.PersonGroupPerson.AddFaceFromStreamAsync(personGroupId, createPersonResult.PersonId, stream).Wait();
+                        client.PersonGroupPerson.AddFaceFromStreamAsync(personGroupId, createPersonResult.PersonId, stream, detectionModel: detectionModel).Wait();
                     }
 
                     using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationCompare1.png"), FileMode.Open))
                     {
-                        faceId2 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                        faceId2 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                     }
 
                     Assert.NotNull(faceId2);
@@ -81,9 +83,9 @@ namespace FaceSDK.Tests
         [Fact]
         public void FaceVerificationLargePersonGroupPositive()
         {
-            using (MockContext context = MockContext.Start(this.GetType().FullName))
+            using (MockContext context = MockContext.Start(this.GetType()))
             {
-                HttpMockServer.Initialize(this.GetType().FullName, "FaceVerificationLargePersonGroupPositive");
+                HttpMockServer.Initialize(this.GetType(), "FaceVerificationLargePersonGroupPositive");
 
                 IFaceClient client = GetFaceClient(HttpMockServer.CreateInstance());
                 Guid? faceId2 = null;
@@ -95,12 +97,12 @@ namespace FaceSDK.Tests
                     Person createPersonResult = client.LargePersonGroupPerson.CreateAsync(largePersonGroupId, "David").Result;
                     using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationBase1.png"), FileMode.Open))
                     {
-                        client.LargePersonGroupPerson.AddFaceFromStreamAsync(largePersonGroupId, createPersonResult.PersonId, stream).Wait();
+                        client.LargePersonGroupPerson.AddFaceFromStreamAsync(largePersonGroupId, createPersonResult.PersonId, stream, detectionModel: detectionModel).Wait();
                     }
 
                     using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationCompare1.png"), FileMode.Open))
                     {
-                        faceId2 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                        faceId2 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                     }
 
                     Assert.NotNull(faceId2);
@@ -115,12 +117,12 @@ namespace FaceSDK.Tests
             }
         }
 
-        [Fact(Skip = "https://github.com/Azure/azure-sdk-for-net/issues/6216")]
+        [Fact]
         public void FaceVerificationFaceNegative()
         {
-            using (MockContext context = MockContext.Start(this.GetType().FullName))
+            using (MockContext context = MockContext.Start(this.GetType()))
             {
-                HttpMockServer.Initialize(this.GetType().FullName, "FaceVerificationFaceNegative");
+                HttpMockServer.Initialize(this.GetType(), "FaceVerificationFaceNegative");
 
                 IFaceClient client = GetFaceClient(HttpMockServer.CreateInstance());
 
@@ -128,12 +130,12 @@ namespace FaceSDK.Tests
                 Guid? faceId2 = null;
                 using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationBase1.png"), FileMode.Open))
                 {
-                    faceId1 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                    faceId1 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                 }
 
                 using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationCompare2.png"), FileMode.Open))
                 {
-                    faceId2 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                    faceId2 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                 }
 
                 Assert.NotNull(faceId1);
@@ -144,12 +146,12 @@ namespace FaceSDK.Tests
             }
         }
 
-        [Fact(Skip = "https://github.com/Azure/azure-sdk-for-net/issues/6216")]
+        [Fact]
         public void FaceVerificationPersonGroupNegative()
         {
-            using (MockContext context = MockContext.Start(this.GetType().FullName))
+            using (MockContext context = MockContext.Start(this.GetType()))
             {
-                HttpMockServer.Initialize(this.GetType().FullName, "FaceVerificationPersonGroupNegative");
+                HttpMockServer.Initialize(this.GetType(), "FaceVerificationPersonGroupNegative");
 
                 IFaceClient client = GetFaceClient(HttpMockServer.CreateInstance());
                 Guid? faceId2 = null;
@@ -161,12 +163,12 @@ namespace FaceSDK.Tests
                     Person createPersonResult = client.PersonGroupPerson.CreateAsync(personGroupId, "David").Result;
                     using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationBase1.png"), FileMode.Open))
                     {
-                        client.PersonGroupPerson.AddFaceFromStreamAsync(personGroupId, createPersonResult.PersonId, stream).Wait();
+                        client.PersonGroupPerson.AddFaceFromStreamAsync(personGroupId, createPersonResult.PersonId, stream, detectionModel: detectionModel).Wait();
                     }
 
                     using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationCompare2.png"), FileMode.Open))
                     {
-                        faceId2 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                        faceId2 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                     }
 
                     Assert.NotNull(faceId2);
@@ -181,12 +183,12 @@ namespace FaceSDK.Tests
             }
         }
 
-        [Fact(Skip = "https://github.com/Azure/azure-sdk-for-net/issues/6216")]
+        [Fact]
         public void FaceVerificationLargePersonGroupNegative()
         {
-            using (MockContext context = MockContext.Start(this.GetType().FullName))
+            using (MockContext context = MockContext.Start(this.GetType()))
             {
-                HttpMockServer.Initialize(this.GetType().FullName, "FaceVerificationLargePersonGroupNegative");
+                HttpMockServer.Initialize(this.GetType(), "FaceVerificationLargePersonGroupNegative");
 
                 IFaceClient client = GetFaceClient(HttpMockServer.CreateInstance());
                 Guid? faceId2 = null;
@@ -198,12 +200,12 @@ namespace FaceSDK.Tests
                     Person createPersonResult = client.LargePersonGroupPerson.CreateAsync(largePersonGroupId, "David").Result;
                     using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationBase1.png"), FileMode.Open))
                     {
-                        client.LargePersonGroupPerson.AddFaceFromStreamAsync(largePersonGroupId, createPersonResult.PersonId, stream).Wait();
+                        client.LargePersonGroupPerson.AddFaceFromStreamAsync(largePersonGroupId, createPersonResult.PersonId, stream, detectionModel: detectionModel).Wait();
                     }
 
                     using (FileStream stream = new FileStream(Path.Combine("TestImages", "verificationCompare2.png"), FileMode.Open))
                     {
-                        faceId2 = client.Face.DetectWithStreamAsync(stream, true, recognitionModel: recognitionModel).Result[0].FaceId;
+                        faceId2 = client.Face.DetectWithStreamAsync(stream, true, detectionModel: detectionModel, recognitionModel: recognitionModel).Result[0].FaceId;
                     }
 
                     Assert.NotNull(faceId2);
